@@ -1,9 +1,15 @@
 {
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/api/feedback",
-      "destination": "/api/feedback",
-      "version": 2
+      "src": "api/feedback.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/feedback",
+      "dest": "api/feedback.js"
     }
   ]
 }
