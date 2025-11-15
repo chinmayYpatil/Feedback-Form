@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/feedback",
+      "destination": "/api/feedback"
+    }
+  ]
+}
