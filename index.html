@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Feedback Form</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Styles */
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #388E3C;
+            --error-color: #F44336;
+            --success-color: #00C853;
+            --border-radius: 12px;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Form Card Styling */
+        .feedback-card {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 450px;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        /* Form Fields Styling */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Rating Stars Styling */
+        .rating {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .rating input {
+            display: none;
+        }
+
+        .rating label {
+            font-size: 2rem;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s;
+            margin: 0 5px;
+        }
+
+        /* Highlight stars on hover/selection */
+        .rating input:checked ~ label,
+        .rating label:hover,
+        .rating label:hover ~ label {
+            color: gold;
+        }
+        
+        /* Ensure selected stars remain gold */
+        .rating input:checked + label {
+            color: gold;
+        }
+
+        /* Submit Button Styling */
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 700;
+            transition: background-color 0.3s, transform 0.1s;
+            margin-top: 15px;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px); /* Hover animation */
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+
+        /* Notification Styling (Error/Success) */
+        .notification {
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            transition: opacity 0.4s, height 0.4s, padding 0.4s;
+        }
+
+        .notification.error {
+            background-color: #FFEBEE;
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+
+        .notification.success {
+            background-color: #E8F5E9;
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .notification.show {
+            opacity: 1;
+            height: auto;
+            padding: 12px;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            min-height: 1.2em; /* Reserve space to prevent layout shift */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="feedback-card">
+        <h2>Customer Feedback</h2>
+        <div id="notification" class="notification"></div>
+
+        <form id="feedback-form">
+            
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" name="fullName" placeholder="Enter your full name">
+                <div id="fullName-error" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address">
+                <div id="email-error" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Rating (1-5 Stars)</label>
+                <div class="rating" id="rating-container">
+                    <input type="radio" id="star5" name="rating" value="5" />
+                    <label for="star5" title="5 stars"><i class="fas fa-star"></i></label>
+                    <input type="radio" id="star4" name="rating" value="4" />
+                    <label for="star4" title="4 stars"><i class="fas fa-star"></i></label>
+                    <input type="radio" id="star3" name="rating" value="3" />
+                    <label for="star3" title="3 stars"><i class="fas fa-star"></i></label>
+                    <input type="radio" id="star2" name="rating" value="2" />
+                    <label for="star2" title="2 stars"><i class="fas fa-star"></i></label>
+                    <input type="radio" id="star1" name="rating" value="1" />
+                    <label for="star1" title="1 star"><i class="fas fa-star"></i></label>
+                </div>
+                <div id="rating-error" class="error-message" style="text-align: center;"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Feedback Message</label>
+                <textarea id="message" name="message" placeholder="Share your experience (at least 10 characters)"></textarea>
+                <div id="message-error" class="error-message"></div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submit-btn">Submit Feedback</button>
+
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('feedback-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const notification = document.getElementById('notification');
+        const API_URL = 'postgresql://feedbackuser:ugjWjm5rdaJ8VUrHmUSDFxgfqRftddmY@dpg-d4c2ah6r433s73d8ijog-a/feedbackdb_i7f9'; // **<-- REPLACE THIS URL**
+
+        // --- Utility Functions ---
+
+        const getSelectedRating = () => {
+            const ratingInput = document.querySelector('input[name="rating"]:checked');
+            return ratingInput ? parseInt(ratingInput.value) : null;
+        };
+
+        const displayError = (fieldId, message) => {
+            const errorElement = document.getElementById(`${fieldId}-error`);
+            if (errorElement) {
+                errorElement.textContent = message;
+            }
+        };
+
+        const clearErrors = () => {
+            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+        };
+
+        const showNotification = (message, type) => {
+            notification.className = 'notification'; // Clear previous classes
+            notification.textContent = message;
+            notification.classList.add(type, 'show');
+            // Hide after 5 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        };
+
+        // --- Validation Logic ---
+
+        const validateForm = (formData) => {
+            clearErrors();
+            let isValid = true;
+
+            // 1. Full Name Required
+            if (!formData.fullName.trim()) {
+                displayError('fullName', 'Full Name is required.');
+                isValid = false;
+            }
+
+            // 2. Email Required & Valid Format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!formData.email.trim()) {
+                displayError('email', 'Email is required.');
+                isValid = false;
+            } else if (!emailRegex.test(formData.email.trim())) {
+                displayError('email', 'Please enter a valid email address.');
+                isValid = false;
+            }
+
+            // 3. Rating Selected
+            if (!formData.rating) {
+                displayError('rating', 'Please select a star rating.');
+                isValid = false;
+            }
+
+            // 4. Message Required & Min Length (10 chars)
+            if (!formData.message.trim()) {
+                displayError('message', 'Message is required.');
+                isValid = false;
+            } else if (formData.message.trim().length < 10) {
+                displayError('message', 'Message must be at least 10 characters long.');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                 showNotification('Please correct the errors in the form.', 'error');
+            }
+            
+            return isValid;
+        };
+
+        // --- Form Submission Handler ---
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            
+            // Collect Form Data
+            const formData = {
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                rating: getSelectedRating(),
+                message: document.getElementById('message').value,
+            };
+
+            // Validate Data
+            if (!validateForm(formData)) {
+                return;
+            }
+
+            // Disable button and show loading state
+            submitBtn.textContent = 'Submitting...';
+            submitBtn.disabled = true;
+            notification.classList.remove('show'); // Hide any previous notifications
+
+            try {
+                // Send data to backend using fetch()
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Success
+                    showNotification('Feedback submitted successfully!', 'success');
+                    form.reset(); // Clear the form
+                    clearErrors(); // Clear any lingering error messages
+                } else {
+                    // Backend validation or other error
+                    const errorMessage = result.error || 'An unexpected error occurred.';
+                    showNotification(errorMessage, 'error');
+                }
+
+            } catch (error) {
+                // Network or other fetch error
+                console.error('Submission Error:', error);
+                showNotification('Network error. Could not connect to the server.', 'error');
+            } finally {
+                // Re-enable button
+                submitBtn.textContent = 'Submit Feedback';
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
