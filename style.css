@@ -71,6 +71,7 @@ textarea {
     display: flex;
     justify-content: center;
     margin-top: 10px;
+    direction: rtl; 
 }
 
 .rating input {
@@ -83,6 +84,7 @@ textarea {
     cursor: pointer;
     transition: color 0.2s;
     margin: 0 5px;
+    direction: ltr; 
 }
 
 .rating input:checked ~ label,
