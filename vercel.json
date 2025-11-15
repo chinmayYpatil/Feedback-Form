@@ -2,7 +2,8 @@
   "rewrites": [
     {
       "source": "/api/feedback",
-      "destination": "/api/feedback"
+      "destination": "/api/feedback",
+      "version": 2
     }
   ]
 }
