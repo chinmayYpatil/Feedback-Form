@@ -1,7 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-require('dotenv').config();
+
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
+
 const { initializeDatabase } = require('./config/db');
 const feedbackRouter = require('./routes/feedback');
 const feedbackLimiter = require('./middleware/rateLimiter');
